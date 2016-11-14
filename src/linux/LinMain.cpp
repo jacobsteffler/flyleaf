@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
     if(argc > 1) a->open_file(argv[1], AV_CH_LAYOUT_STEREO, AV_SAMPLE_FMT_FLT, 48000);
     else a->open_file("https://www2.iis.fraunhofer.de/AAC/ChID-BLITS-EBU-Narration.mp4", AV_CH_LAYOUT_STEREO, AV_SAMPLE_FMT_FLT, 48000);
 
-    std::ofstream out("https://www2.iis.fraunhofer.de/AAC/ChID-BLITS-EBU-Narration.mp4", std::ofstream::binary);
+    std::ofstream out("audio.bin", std::ofstream::binary);
 
     float *samples = new float[48000*2];
     int count;
