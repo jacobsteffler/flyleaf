@@ -3,17 +3,11 @@
 
 #include <string>
 
-class PlayController
-{
-    public:
-
-    PlayController();
-    PlayController(const PlayController &p) = delete;
-    ~PlayController();
-
+namespace controller {
+    void init();
     void load(const std::string &path);
     void play();
     void pause();
-};
+}
 
 #endif

@@ -1,26 +1,21 @@
 #include "PlayController.h"
 
-PlayController::PlayController()
+void controller::init()
 {
 
 }
 
-PlayController::~PlayController()
+void controller::load(const std::string &path)
 {
 
 }
 
-void PlayController::load(const std::string &path)
+void controller::play()
 {
 
 }
 
-void PlayController::play()
-{
-
-}
-
-void PlayController::pause()
+void controller::pause()
 {
 
 }
