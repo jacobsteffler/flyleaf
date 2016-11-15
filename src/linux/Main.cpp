@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
 
     float *samples = new float[48000*2];
     int count;
-    while(count = a->get_samples((uint8_t **) &samples, 48000))
+    while((count = a->get_samples((uint8_t **) &samples, 48000)) > 0)
     {
         out.write((char *) samples, count * sizeof(float) * 2);
     }
