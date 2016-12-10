@@ -5,13 +5,13 @@ include_directories(include)
 
 file(GLOB GENERAL_SOURCES "src/*.cpp")
 
-if(WIN32)
-    file(GLOB PLATFORM_SOURCES "src/win/*.cpp")
-endif(WIN32)
-
-if(UNIX)
+if(APPLE)
+    file(GLOB PLATFORM_SOURCES "src/mac/*.cpp")
+elseif(UNIX)
     file(GLOB PLATFORM_SOURCES "src/linux/*.cpp")
-endif(UNIX)
+else()
+    file(GLOB PLATFORM_SOURCES "src/win/*.cpp")
+endif()
 
 set(SOURCES ${GENERAL_SOURCES} ${PLATFORM_SOURCES})
 
