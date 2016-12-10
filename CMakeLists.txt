@@ -17,3 +17,4 @@ set(SOURCES ${GENERAL_SOURCES} ${PLATFORM_SOURCES})
 
 add_executable(${PROJECT_NAME} ${SOURCES})
 TARGET_LINK_LIBRARIES(${PROJECT_NAME} avformat avcodec avutil swresample)
+TARGET_COMPILE_FEATURES(${PROJECT_NAME} PRIVATE cxx_delegating_constructors)
