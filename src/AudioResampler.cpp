@@ -10,6 +10,8 @@ AudioResampler::AudioResampler() : AudioResampler(std::string(), 0, AV_SAMPLE_FM
 AudioResampler::AudioResampler(const std::string &path, uint64_t ch_layout,
                                AVSampleFormat format, int rate)
 {
+    dec = new AudioDecoder();
+
     if(path.length())
     {
         open_file(path, ch_layout, format, rate);
@@ -24,14 +26,12 @@ AudioResampler::~AudioResampler()
 void AudioResampler::open_file(const std::string &path, uint64_t ch_layout,
                                AVSampleFormat format, int rate)
 {
-    clean_up();
-    init_swr();
-
     AudioResampler::ch_layout   = ch_layout;
     AudioResampler::format      = format;
 
-    dec = new AudioDecoder(path);
+    dec->open_file(path);
 
+    if(swr_ctx) swr_free(&swr_ctx);
     swr_ctx = swr_alloc_set_opts(
         swr_ctx,
         ch_layout,
@@ -121,10 +121,6 @@ int AudioResampler::get_samples(uint8_t ***buffers)
 /*
  *  Private AudioResampler functions
  */
-
-void AudioResampler::init_swr()
-{
-}
 
 void AudioResampler::clean_up()
 {

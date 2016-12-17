@@ -9,6 +9,8 @@ AudioDecoder::AudioDecoder() : AudioDecoder(std::string())
 
 AudioDecoder::AudioDecoder(const std::string &path)
 {
+    init_av();
+
     if(path.length())
     {
         open_file(path);
@@ -23,7 +25,7 @@ AudioDecoder::~AudioDecoder()
 void AudioDecoder::open_file(const std::string &path)
 {
     clean_up();
-    init_av();
+    alloc();
 
     // Open the file or stream
     if(avformat_open_input(&format_ctx, path.c_str(), NULL, NULL) != 0)
@@ -103,10 +105,7 @@ uint64_t AudioDecoder::get_ch_layout() const
 {
     if(!init) return 0;
 
-    //return guess_channel_layout(codec_ctx->channels);
-    //int64_t x = av_get_default_channel_layout(codec_ctx->channels);
     return codec_ctx->channel_layout;
-    //return av_get_default_channel_layout(codec_ctx->channels);
 }
 
 AVSampleFormat AudioDecoder::get_format() const
@@ -131,7 +130,10 @@ void AudioDecoder::init_av()
 {
     av_register_all();
     avformat_network_init();
+}
 
+void AudioDecoder::alloc()
+{
     codec_ctx   = avcodec_alloc_context3(NULL);
     packet      = av_packet_alloc();
     frame       = av_frame_alloc();
@@ -192,21 +194,5 @@ int AudioDecoder::fill_frame()
     else
     {
         return result;
-    }
-}
-
-//TODO
-uint64_t AudioDecoder::guess_channel_layout(int nb_channels)
-{
-    switch(nb_channels)
-    {
-        case 1:     return AV_CH_LAYOUT_MONO;
-        case 2:     return AV_CH_LAYOUT_STEREO;
-        case 3:     return AV_CH_LAYOUT_SURROUND;
-        case 4:     return AV_CH_LAYOUT_QUAD;
-        case 5:     return AV_CH_LAYOUT_5POINT0;
-        case 6:     return AV_CH_LAYOUT_5POINT1;
-        case 8:     return AV_CH_LAYOUT_7POINT1;
-        default:    return 0;
     }
 }

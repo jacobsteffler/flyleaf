@@ -32,6 +32,7 @@ class Audio
     int             remaining_samples   = 0;
     int             consumed_samples    = 0;
 
+    void deinit();
     void clean_up();
 };
 

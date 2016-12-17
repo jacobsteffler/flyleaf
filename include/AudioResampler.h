@@ -35,10 +35,8 @@ class AudioResampler
     SwrContext      *swr_ctx    = NULL;
 
     bool            init        = false;
-    uint64_t        ch_layout;
-    AVSampleFormat  format;
-
-    void init_swr();
+    uint64_t        ch_layout   = 0;
+    AVSampleFormat  format      = AV_SAMPLE_FMT_NONE;
 
     void clean_up();
 };

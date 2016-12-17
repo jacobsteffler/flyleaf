@@ -47,11 +47,11 @@ class AudioDecoder
 
     void    init_av();
 
+    void    alloc();
+
     void    clean_up();
 
     int     fill_frame();
-
-    static uint64_t guess_channel_layout(int nb_channels);
 };
 
 #endif

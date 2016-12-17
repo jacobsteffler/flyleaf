@@ -12,6 +12,8 @@ Audio::Audio() : Audio(std::string(), 0, AV_SAMPLE_FMT_NONE, 0)
 Audio::Audio(const std::string &path, uint64_t ch_layout,
              AVSampleFormat format, int rate)
 {
+    r = new AudioResampler();
+
     if(path.length())
     {
         open_file(path, ch_layout, format, rate);
@@ -21,6 +23,7 @@ Audio::Audio(const std::string &path, uint64_t ch_layout,
 Audio::~Audio()
 {
     clean_up();
+    deinit();
 }
 
 void Audio::open_file(const std::string &path, uint64_t ch_layout,
@@ -30,7 +33,7 @@ void Audio::open_file(const std::string &path, uint64_t ch_layout,
 
     Audio::format = format;
 
-    r = new AudioResampler(path, ch_layout, format, rate);
+    r->open_file(path, ch_layout, format, rate);
 
     nb_ch   = av_get_channel_layout_nb_channels(ch_layout);
     init    = true;
@@ -84,10 +87,13 @@ int Audio::get_samples(uint8_t **buffer, int samples_wanted)
  *  Private Audio functions
  */
 
-void Audio::clean_up()
+void Audio::deinit()
 {
     if(r) delete r;
+}
 
+void Audio::clean_up()
+{
     if(remaining_samples)
     {
         av_freep(&samples[0]);
