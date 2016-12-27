@@ -54,7 +54,7 @@ namespace coreaudio_example {
         AudioComponentInstanceDispose (output_instance);
     }
 
-    bool open_audio (int format, int rate, int chan, AURenderCallbackStruct * callback)
+    bool open_audio (format_type format, int rate, int chan, AURenderCallbackStruct * callback)
     {
         struct CoreAudioFormatDescriptionMap * m = nullptr;
 
@@ -86,8 +86,8 @@ namespace coreaudio_example {
         streamFormat.mFramesPerPacket = 1;
         streamFormat.mChannelsPerFrame = chan;
         streamFormat.mBitsPerChannel = m->bits_per_sample;
-        streamFormat.mBytesPerPacket = chan * buffer_bytes_per_channel;
-        streamFormat.mBytesPerFrame = chan * buffer_bytes_per_channel;
+        streamFormat.mBytesPerPacket = chan * 4;
+        streamFormat.mBytesPerFrame = chan * 4;
 
         printf ("Stream format:\n");
         printf (" Channels: %d\n", streamFormat.mChannelsPerFrame);
