@@ -4,12 +4,25 @@
 #include <cstdint>
 #include <fstream>
 #include <iostream>
+#include <condition_variable>
+#include <mutex>
 
 Audio *a;
 
+std::condition_variable playing;
+std::mutex mut;
+
 OSStatus test(void *inRefCon, AudioUnitRenderActionFlags *ioActionFlags, const AudioTimeStamp *inTimeStamp, UInt32 inBusNumber, UInt32 inNumberFrames, AudioBufferList *ioData)
 {
-    a->get_samples((uint8_t **) &(ioData->mBuffers[0].mData), ioData->mBuffers[0].mDataByteSize / 8);
+    int result =
+        a->get_samples((uint8_t **) &(ioData->mBuffers[0].mData), ioData->mBuffers[0].mDataByteSize / 8);
+
+    if(!result)
+    {
+        mut.lock();
+        playing.notify_all();
+        mut.unlock();
+    }
 
     return 0;
 }
@@ -27,7 +40,12 @@ int main(int argc, const char *argv[])
 
     coreaudio_example::open_audio(coreaudio_example::FMT_S32_LE, 48000, 2, &blah);
 
-    sleep(100);
+    coreaudio_example::set_volume(100);
+
+    std::unique_lock<std::mutex> lck(mut);
+    mut.lock();
+    playing.wait(lck);
+    mut.unlock();
 
     return 0;
 }
