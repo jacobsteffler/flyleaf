@@ -1,4 +1,5 @@
-add_subdirectory(audio)
+add_subdirectory(decode)
+add_subdirectory(playback)
 
 if(APPLE)
     add_subdirectory(mac)
