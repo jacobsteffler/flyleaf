@@ -9,4 +9,5 @@ endif()
 
 add_library(Playback ${PLAY_SRC})
 target_include_directories(Playback PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_libraries(Playback PUBLIC Decode)
 target_link_libraries(Playback PUBLIC ${EXTRA_LIBS})

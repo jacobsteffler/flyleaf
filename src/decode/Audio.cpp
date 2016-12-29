@@ -100,5 +100,7 @@ void Audio::clean_up()
         av_freep(&samples);
     }
 
+    remaining_samples = 0;
+
     init = false;
 }
