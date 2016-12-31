@@ -8,8 +8,9 @@ namespace Playback
     static const int rate               = 48000;
     static const int chan               = 2;
     static const AVSampleFormat format  = AV_SAMPLE_FMT_S32;
+    static const uint64_t ch_layout     = AV_CH_LAYOUT_STEREO;
 
-    static std::mutex audiolck;
+    static std::mutex audio_lock;
     static Audio *a;
 
     static AURenderCallbackStruct s_callback;
@@ -65,17 +66,18 @@ void Playback::init()
     }
 
     AudioStreamBasicDescription stream_format;
-    stream_format.mSampleRate        = rate;
-    stream_format.mFormatID          = kAudioFormatLinearPCM;
-    stream_format.mFormatFlags       = m->flags;
-    stream_format.mFramesPerPacket   = 1;
-    stream_format.mChannelsPerFrame  = chan;
-    stream_format.mBitsPerChannel    = m->bits_per_sample;
-    stream_format.mBytesPerPacket    =
-    stream_format.mBytesPerFrame     = chan * m->bytes_per_sample;
+    stream_format.mSampleRate       = rate;
+    stream_format.mFormatID         = kAudioFormatLinearPCM;
+    stream_format.mFormatFlags      = m->flags;
+    stream_format.mFramesPerPacket  = 1;
+    stream_format.mChannelsPerFrame = chan;
+    stream_format.mBitsPerChannel   = m->bits_per_sample;
+    stream_format.mBytesPerPacket   =
+    stream_format.mBytesPerFrame    = chan * m->bytes_per_sample;
 
 #ifndef NDEBUG
     printf("Stream format:\n");
+    printf(" Flags: %d\n", stream_format.mFormatFlags);
     printf(" Channels: %d\n", stream_format.mChannelsPerFrame);
     printf(" Sample rate: %f\n", stream_format.mSampleRate);
     printf(" Bits per channel: %d\n", stream_format.mBitsPerChannel);
@@ -100,9 +102,9 @@ void Playback::init()
 
 void Playback::open_stream(const std::string &path)
 {
-    audiolck.lock();
-    a->open_file(path, AV_CH_LAYOUT_STEREO, format, rate);
-    audiolck.unlock();
+    audio_lock.lock();
+    a->open_file(path, ch_layout, format, rate);
+    audio_lock.unlock();
 }
 
 void Playback::play(bool play)
@@ -127,10 +129,10 @@ OSStatus Playback::render_callback(void *inRefCon, AudioUnitRenderActionFlags *i
                                    const AudioTimeStamp *inTimeStamp, UInt32 inBusNumber,
                                    UInt32 inNumberFrames, AudioBufferList *ioData)
 {
-    audiolck.lock();
+    audio_lock.lock();
     a->get_samples((uint8_t **) &(ioData->mBuffers[0].mData),
                    ioData->mBuffers[0].mDataByteSize / (8));
-    audiolck.unlock();
+    audio_lock.unlock();
 
     return 0;
 }

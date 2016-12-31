@@ -26,6 +26,7 @@ int main(int argc, const char *argv[])
             std::cin >> path;
             std::cout << path;
             Playback::open_stream(path);
+            if(!playing) Playback::play(playing = !playing);
         }
     }
     while(in != 'q');
