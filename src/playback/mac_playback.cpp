@@ -47,8 +47,7 @@ namespace Playback
             throw 2;
         }
 
-        struct CoreAudioFormatDescriptionMap *m = NULL;
-
+        CoreAudioFormatDescriptionMap *m = NULL;
         for(CoreAudioFormatDescriptionMap it : format_map)
         {
             if(it.type == format)

@@ -94,6 +94,8 @@ void Audio::deinit()
 
 void Audio::clean_up()
 {
+    init = false;
+
     if(remaining_samples)
     {
         av_freep(&samples[0]);
@@ -101,6 +103,4 @@ void Audio::clean_up()
     }
 
     remaining_samples = 0;
-
-    init = false;
 }
