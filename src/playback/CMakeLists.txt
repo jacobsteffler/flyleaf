@@ -1,5 +1,5 @@
 if(APPLE)
-    set(PLAY_SRC "mac_playback.cpp")
+    set(PLAY_SRC "MPlayback.cpp")
 
     find_library(AudioUnit AudioUnit)
     set(EXTRA_LIBS ${EXTRA_LIBS} ${AudioUnit})
@@ -9,5 +9,6 @@ endif()
 
 add_library(Playback ${PLAY_SRC})
 target_include_directories(Playback PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+
 target_link_libraries(Playback PUBLIC Decode)
 target_link_libraries(Playback PUBLIC ${EXTRA_LIBS})

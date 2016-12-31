@@ -1,12 +1,15 @@
 #include <CoreAudio/CoreAudio.h>
 #include <AudioUnit/AudioUnit.h>
 
-#include "playback.h"
+#include <mutex>
+
+#include "Playback.h"
+#include "Audio.h"
 
 namespace Playback {
     struct CoreAudioFormatDescriptionMap
     {
-        format_type type;
+        AVSampleFormat format;
         int bits_per_sample;
         int bytes_per_sample;
         unsigned int flags;
