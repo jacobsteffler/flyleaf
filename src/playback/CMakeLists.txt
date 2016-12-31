@@ -5,6 +5,7 @@ if(APPLE)
     set(EXTRA_LIBS ${EXTRA_LIBS} ${AudioUnit})
 elseif(UNIX)
 else()
+    set(PLAY_SRC "WPlayback.cpp")
 endif()
 
 add_library(Playback ${PLAY_SRC})
