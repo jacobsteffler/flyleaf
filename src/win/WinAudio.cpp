@@ -45,7 +45,7 @@ AVSampleFormat WinFmt(WAVEFORMATEX *fmt)
 
 Audio *WinAllocAudio(const std::string &filename, WAVEFORMATEX *fmt)
 {
-    return new Audio(filename, AV_CH_LAYOUT_STEREO_DOWNMIX, WinFmt(fmt), fmt->nSamplesPerSec);
+    return new Audio(filename, AV_CH_LAYOUT_STEREO, WinFmt(fmt), fmt->nSamplesPerSec);
 }
 
 // REFERENCE_TIME time units per second and per millisecond
