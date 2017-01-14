@@ -52,5 +52,8 @@ int main(int argc, char *argv[])
         out.write((char *) samples, count * sizeof(float) * 2);
     }
 
+    delete a;
+    delete [] samples;
+
     return 0;
 }
